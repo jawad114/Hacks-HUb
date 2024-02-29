@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 28, 2024 at 06:09 PM
+-- Generation Time: Feb 24, 2024 at 01:11 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.11
 
@@ -42,6 +42,13 @@ CREATE TABLE `events` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `events`
+--
+
+INSERT INTO `events` (`id`, `event_title`, `event_description`, `creator_id`, `start_date`, `end_date`, `location`, `guidelines`, `participation_type`, `category_id`, `created_at`, `updated_at`) VALUES
+(6, 'six Rubr Hackathon', 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32.\n\n', 43, '2020-01-02 00:00:00', '2020-02-02 00:00:00', 'Remote', 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32.\n\n', 'team', 1, '2024-02-24 11:36:52', '2024-02-24 11:36:52');
+
 -- --------------------------------------------------------
 
 --
@@ -77,6 +84,13 @@ CREATE TABLE `event_participants` (
   `user_id` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `event_participants`
+--
+
+INSERT INTO `event_participants` (`id`, `event_id`, `user_id`) VALUES
+(4, 6, 44);
+
 -- --------------------------------------------------------
 
 --
@@ -89,6 +103,13 @@ CREATE TABLE `event_team` (
   `user_id` int(10) UNSIGNED NOT NULL,
   `role_type` enum('organizer','judge') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `event_team`
+--
+
+INSERT INTO `event_team` (`id`, `event_id`, `user_id`, `role_type`) VALUES
+(2, 6, 45, 'judge');
 
 -- --------------------------------------------------------
 
@@ -188,6 +209,13 @@ CREATE TABLE `project_entries` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `project_entries`
+--
+
+INSERT INTO `project_entries` (`id`, `project_title`, `participant_or_team_name`, `event_id`, `video_url`, `git_url`, `project_writeups`, `submitted_by`, `created_at`, `updated_at`) VALUES
+(1, 'The Road Not Taken is six rubrics', 'Furahi Day', 6, NULL, NULL, 'Two roads diverged in a yellow wood,And sorry I could not travel both And be one traveler, long I stood And looked down one as far as I could To where it bent in the undergrowth', 44, '2024-02-24 11:42:25', '2024-02-24 11:42:25');
+
 -- --------------------------------------------------------
 
 --
@@ -209,6 +237,13 @@ CREATE TABLE `project_grading` (
   `average_rating` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `project_grading`
+--
+
+INSERT INTO `project_grading` (`id`, `project_event_id`, `project_id`, `judge_id`, `product_design`, `functionality`, `innovation`, `product_fit`, `extensibility`, `presentation`, `judge_comments`, `average_rating`) VALUES
+(1, 6, 1, 45, 6, 15, 34, 43, 4, 3, 'Awesome job on this project', 17.5);
+
 -- --------------------------------------------------------
 
 --
@@ -220,20 +255,24 @@ CREATE TABLE `users` (
   `username` varchar(255) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `bio` text DEFAULT NULL,
+  `mobile` varchar(20) DEFAULT NULL,
+  `country` varchar(50) DEFAULT NULL,
+  `region` varchar(20) DEFAULT NULL,
+  `DOB` date DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `fullname` varchar(255) DEFAULT NULL,
   `verified` tinyint(1) DEFAULT 0,
-  `image_url` text DEFAULT NULL,
-  `role` varchar(50) DEFAULT NULL
+  `image_url` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `bio`, `email`, `fullname`, `verified`, `image_url`, `role`) VALUES
-(72, NULL, '$2b$15$20BDZWCZ9FtRhKRa5CwTj.q5rrskfUw6FJ9jxJh7PlJIuDLm.kEBS', NULL, 'atrbhrg@hacktonapi.com', NULL, 0, NULL, 'participants'),
-(73, NULL, '$2b$15$/GXFjJPfgyxMrNSy/.f3POQspBlg.zgvwKXkX4WSQUcl.3SyxMqD6', NULL, 'jawad@hacktonapi.com', NULL, 0, NULL, 'participants');
+INSERT INTO `users` (`id`, `username`, `password`, `bio`, `email`, `fullname`, `verified`, `image_url`) VALUES
+(43, NULL, '$2b$15$vCm7RiDxgNbs4uImp9s8KuCaR71K.Hel/8cHbvh19aWRq3ZcAqojS', NULL, 'jawadshayhrr@hacktonapi.com', NULL, 0, NULL),
+(44, NULL, '$2b$15$WhZmKpVboYJ2rKVTuJpbGuJoMnHAL.//cPvjMbtV.hzHqA0VsMkHy', NULL, 'jawadshayhfrr@hacktonapi.com', NULL, 0, NULL),
+(45, NULL, '$2b$15$T8tixvXLuPiE.Uclb3fqyOkEqgeAKrLE7f/oNN.4NCPAgsCqbuPIe', NULL, 'r@hacktonapi.com', NULL, 0, NULL);
 
 --
 -- Indexes for dumped tables
@@ -394,7 +433,7 @@ ALTER TABLE `project_grading`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- Constraints for dumped tables

@@ -21,12 +21,18 @@ module.exports = class UserValidator {
    * @returns {obj} Validation error messages or contents of req.body
    */
   static async userInput(req, res, next) {
-    const { email, password,role } = req.body;
+    const { email, password,fullname,username,mobile,country,region,DOB, } = req.body;
     const { id } = req.params;
-  
+    const { role } = req.query;
     const check = checkItem({
       email,
-      password
+      password,
+      fullname,
+      username,
+      mobile,
+      country,
+      region,
+      DOB,
     });
     if (Object.keys(check).length > 0) {
       return res.status(400).json({
@@ -51,7 +57,12 @@ module.exports = class UserValidator {
     const newUser = await userModel.addUser({
       email,
       password: hash,
-      role
+      fullname,
+      username,
+      mobile,
+      country,
+      region,
+      DOB,
     });
     if (id) {
       if (role) {
