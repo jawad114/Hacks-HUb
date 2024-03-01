@@ -59,14 +59,15 @@ function handleEventsEdit(req, res) {
   const editedEndDate = moment(req.body.end_date).format('YYYY-MM-DD');
   const editedEvent = {
     event_title: req.body.event_title,
-    event_description: req.body.event_description,
+    numberOfParticipants: req.body.numberOfParticipants,
     creator_id: userId,
     start_date: editedStartDate,
     end_date: editedEndDate,
     location: req.body.location,
-    guidelines: req.body.guidelines,
-    participation_type: req.body.participation_type,
+    preferedLanguage: req.body.preferedLanguage,
+    prizeAmount: req.body.prizeAmount,
     category_id: req.body.category_id,
+    levelOfParticipant:req.body.levelOfParticipant
 
   };
 
@@ -97,14 +98,15 @@ function handleEventsPost(req, res, next) {
 
   const event = {
     event_title: req.body.event_title,
-    event_description: req.body.event_description,
+    numberOfParticipants: req.body.numberOfParticipants,
     creator_id: userId,
     start_date: startDate,
     end_date: endDate,
     location: req.body.location,
-    guidelines: req.body.guidelines,
-    participation_type: req.body.participation_type,
+    preferedLanguage: req.body.preferedLanguage,
+    prizeAmount: req.body.prizeAmount,
     category_id: req.body.category_id,
+    levelOfParticipant:req.body.levelOfParticipant
   };
 
   db.add(event)

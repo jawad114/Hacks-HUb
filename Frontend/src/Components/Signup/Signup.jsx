@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { Button, Input,Typography } from '@material-tailwind/react';
+import { Button, Input,Typography,Select } from '@material-tailwind/react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {  FaEye, FaEyeSlash } from 'react-icons/fa6';
 import { AxiosRequest } from '../Axios/AxiosRequest';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSelectedRole } from '../../State/Reducers/roleSlice'; 
 
 const Signup = ({ toggleForm }) => {
   const [fullname, setfullName] = useState('');
@@ -16,6 +19,13 @@ const Signup = ({ toggleForm }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
+  const storedRole = localStorage.getItem('selectedRole');
+  const role = useSelector((state) => state.role.selectedRole) || storedRole || 'Participant';
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const dispatch = useDispatch();
+  const roleOptions = ['Participant', 'Organizer'];
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,7 +57,7 @@ const Signup = ({ toggleForm }) => {
     }
   
     try {
-      const response = await AxiosRequest.post('/api/auth/register', { fullname, username, email, mobile, country, region, DOB, password });
+      const response = await AxiosRequest.post('/api/auth/register', { fullname, username, email, mobile, country, region, DOB, password,role });
   
       // Handle response
       console.log('Registration successful:', response.data);
@@ -61,7 +71,7 @@ const Signup = ({ toggleForm }) => {
       console.error('Error during registration:', error.message);
   
       if (error.response && error.response.status === 409) {
-        toast.error('Account already exists');
+        toast.error('Account with this email already exists, try another email address');
       } else {
         toast.error('Registration failed');
       }
@@ -153,16 +163,26 @@ const Signup = ({ toggleForm }) => {
             className="focus:ring-0"
 
 />
-          <Input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            label="Password"
-            required
-            color="black"
-            size="md"
-            className="focus:ring-0"
-          />
+<div className="relative">
+  <Input
+    type={showPassword ? "text" : "password"}
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    label="Password"
+    required
+    color="black"
+    size="md"
+    className="focus:ring-0 pr-10"
+  />
+  <div
+    className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+    onClick={() => setShowPassword(!showPassword)}
+  >
+    {showPassword ? <FaEyeSlash /> : <FaEye />}
+  </div>
+</div>
+
+
           <Typography
         variant="small"
         color="gray"
@@ -182,9 +202,11 @@ const Signup = ({ toggleForm }) => {
         </svg>
         Use at least 8 characters, one uppercase, one lowercase and one number.
       </Typography>
+      <div className="relative">
+
           <Input
-            type="password"
-            value={confirmPassword}
+    type={showConfirmPassword ? "text" : "password"}
+    value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             label="Confirm Password"
             required
@@ -192,6 +214,29 @@ const Signup = ({ toggleForm }) => {
             size="md"
             className="focus:ring-0"
           />
+           <div
+    className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+  >
+    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+  </div>
+</div>
+          <Select
+variant="outlined"       
+label="Select Role"
+  value={role}
+  onChange={(value) => dispatch(setSelectedRole(value))}
+  size="md"
+  className="focus:ring-0"
+>
+  {roleOptions.map((option) => (
+    <Select.Option key={option} value={option}>
+      {option}
+    </Select.Option>
+  ))}
+</Select>
+
+
           <Button type="submit" color="black" size="lg">
             Sign up
           </Button>

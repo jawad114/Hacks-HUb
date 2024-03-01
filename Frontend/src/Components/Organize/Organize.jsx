@@ -1,34 +1,78 @@
 import React, { useState } from 'react';
-import Header from '../Header/Header';
-import { Input, Popover, PopoverHandler, PopoverContent,Button } from '@material-tailwind/react';
-import { format } from 'date-fns';
-import { DayPicker } from 'react-day-picker';
-import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline';
+import { Input,Button,Select } from '@material-tailwind/react';
+import { useSelector} from 'react-redux'; // Import useSelector and useDispatch
+import { selectToken } from '../../State/Reducers/tokenSlice';
+import { AxiosRequest } from '../Axios/AxiosRequest';
+import { toast,ToastContainer } from 'react-toastify';
 
 const Organize = () => {
   const [eventName, setEventName] = useState('');
   const [participants, setParticipants] = useState('');
-  const [startdate, setstartDate] = useState();
-  const [enddate, setendDate] = useState();
+  const [startdate, setstartDate] = useState('');
+  const [enddate, setendDate] = useState('');
   const [timeAllowed, setTimeAllowed] = useState('');
   const [category, setCategory] = useState('');
   const [venue, setVenue] = useState('');
   const [language, setLanguage] = useState('');
   const [prizeAmount, setPrizeAmount] = useState('');
   const [participantLevel, setParticipantLevel] = useState('');
+  const storedToken = localStorage.getItem('token');
+  const token = useSelector(selectToken) || storedToken;
+  
 
-  const handleSubmit = (e) => {
+
+  const categoryOptions = [
+    { value: '1', label: 'Summer Hackaton' },
+    { value: '2', label: 'Winner Hackaton' },
+    { value: '3', label: 'Innovate Hackaton' },
+    { value: '4', label: 'Student Hackaton' },
+    { value: '5', label: 'Global Hackaton' },
+    { value: '6', label: 'Corporate Hackaton' },
+
+  ];
+
+  const handleSubmit = async(e) => {
     e.preventDefault();
+
 console.log("Form submission",eventName,participants,startdate,enddate,timeAllowed,category,venue,language,prizeAmount,participantLevel)
+const eventData = {
+  event_title: eventName,
+  numberOfParticipants: participants,
+  start_date: startdate,
+  allowed_time: timeAllowed,
+  end_date: enddate,
+  location: venue,
+  preferedLanguage: language,
+  prizeAmount: prizeAmount,
+  category_id: category,
+  levelOfParticipant: participantLevel
+};
+
+try {
+  console.log("Token",token);
+  console.log("Time Allowed",eventData.allowed_time);
+
+  const response = await AxiosRequest.post('/api/events/create-event', eventData, {
+    headers: {
+      authorization: token // Pass the authorization token in the request headers
+    }
+  });
+  console.log('Event Created Successfully',response.data); // Log the response from the backend
+  toast.success('Event Created Successfully');
+} catch (error) {
+  console.error(error); // Log any errors
+  toast.error('Failed To Create Event');
+
+}
   };
 
   return (
     <>
-      <Header />
-      <div className="min-h-screen w-screen flex items-center justify-center bg-[#14082c] py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-screen space-y-8 p-8 rounded-xl ">
+      <div className="min-h-screen min-w-screen flex items-center justify-center bg-[#14082c] py-12 px-4 sm:px-6 lg:px-8">
+       <ToastContainer/> 
+      <div className="max-w-md w-screen space-y-8 p-8 bg-white rounded-xl shadow-xl">
           <div>
-            <h1 className="text-2xl text-center font-bold mb-4 text-white dark:text-white">Organize Hackathons</h1>
+            <h1 className="text-2xl text-center font-bold mb-4 text-black dark:text-white">Organize Hackathons</h1>
           </div>
           <form onSubmit={handleSubmit} className="mt-8 space-y-6">
             <Input
@@ -37,7 +81,7 @@ console.log("Form submission",eventName,participants,startdate,enddate,timeAllow
               value={eventName}
               onChange={(e) => setEventName(e.target.value)}
               size="md"
-              color="white"
+              color="black"
               className="focus:ring-0"
             />
             <Input
@@ -45,7 +89,7 @@ console.log("Form submission",eventName,participants,startdate,enddate,timeAllow
               label="Number of Participants"
               value={participants}
               onChange={(e) => setParticipants(e.target.value)}
-              color="white"
+              color="black"
               size="md"
               className="focus:ring-0"
             />
@@ -54,126 +98,58 @@ console.log("Form submission",eventName,participants,startdate,enddate,timeAllow
               label="Time Allowed"
               value={timeAllowed}
               onChange={(e) => setTimeAllowed(e.target.value)}
-              color="white"
+              color="black"
               size="md"
               className="focus:ring-0"
             />
-             <Popover placement="bottom">
-              <PopoverHandler>
                 <Input
-                  type="text"
+                  type="date"
                   label="Select Start Date"
-                  value={startdate ? format(startdate, 'PPP') : ''}
-                  readOnly
-                  color="white"
+                  value={startdate}
+                  onChange={(e) => setstartDate(e.target.value)}
+                  color="black"
                   size="md"
                   className="focus:ring-0"
                 />
-              </PopoverHandler>
-              <PopoverContent>
-                <DayPicker
-                  mode="single"
-                  selected={startdate}
-                  onSelect={setstartDate}
-                  showOutsideDays
-                  className="border-0"
-                  classNames={{
-                    caption: 'flex justify-center py-2  mb-4 relative items-center',
-                    caption_label: 'text-sm font-medium text-gray-900',
-                    nav: 'flex items-center',
-                    nav_button: 'h-6 w-6 bg-transparent hover:bg-blue-gray-50 p-1 rounded-md transition-colors duration-300',
-                    nav_button_previous: 'absolute left-1.5',
-                    nav_button_next: 'absolute right-1.5',
-                    table: 'w-full border-collapse',
-                    head_row: 'flex font-medium text-gray-900',
-                    head_cell: 'm-0.5 w-9 font-normal text-sm',
-                    row: 'flex w-full mt-2',
-                    cell: 'text-gray-600 rounded-md h-9 w-9 text-center text-sm p-0 m-0.5 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-gray-900/20 [&:has([aria-selected].day-outside)]:text-white [&:has([aria-selected])]:bg-gray-900/50 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20',
-                    day: 'h-9 w-9 p-0 font-normal',
-                    day_range_end: 'day-range-end',
-                    day_selected: 'rounded-md bg-gray-900 text-white hover:bg-gray-900 hover:text-white focus:bg-gray-900 focus:text-white',
-                    day_today: 'rounded-md bg-gray-200 text-gray-900',
-                    day_outside: 'day-outside text-gray-500 opacity-50 aria-selected:bg-gray-500 aria-selected:text-gray-900 aria-selected:bg-opacity-10',
-                    day_disabled: 'text-gray-500 opacity-50',
-                    day_hidden: 'invisible',
-                  }}
-                  components={{
-                    IconLeft: ({ ...props }) => (
-                      <ChevronLeftIcon {...props} className="h-4 w-4 stroke-2" />
-                    ),
-                    IconRight: ({ ...props }) => (
-                      <ChevronRightIcon {...props} className="h-4 w-4 stroke-2" />
-                    ),
-                  }}
-                />
-              </PopoverContent>
-            </Popover>
-            <Popover placement="bottom">
-              <PopoverHandler>
                 <Input
-                  type="text"
+                  type="date"
                   label="Select End Date"
-                  value={enddate ? format(enddate, 'PPP') : ''}
-                  readOnly
-                  color="white"
+                  value={enddate}
+                  onChange={(e) => setendDate(e.target.value)}
+                  color="black"
                   size="md"
                   className="focus:ring-0"
                 />
-              </PopoverHandler>
-              <PopoverContent>
-                <DayPicker
-                  mode="single"
-                  selected={enddate}
-                  onSelect={setendDate}
-                  showOutsideDays
-                  className="border-0"
-                  classNames={{
-                    caption: 'flex justify-center py-2  mb-4 relative items-center',
-                    caption_label: 'text-sm font-medium text-gray-900',
-                    nav: 'flex items-center',
-                    nav_button: 'h-6 w-6 bg-transparent hover:bg-blue-gray-50 p-1 rounded-md transition-colors duration-300',
-                    nav_button_previous: 'absolute left-1.5',
-                    nav_button_next: 'absolute right-1.5',
-                    table: 'w-full border-collapse',
-                    head_row: 'flex font-medium text-gray-900',
-                    head_cell: 'm-0.5 w-9 font-normal text-sm',
-                    row: 'flex w-full mt-2',
-                    cell: 'text-gray-600 rounded-md h-9 w-9 text-center text-sm p-0 m-0.5 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-gray-900/20 [&:has([aria-selected].day-outside)]:text-white [&:has([aria-selected])]:bg-gray-900/50 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20',
-                    day: 'h-9 w-9 p-0 font-normal',
-                    day_range_end: 'day-range-end',
-                    day_selected: 'rounded-md bg-gray-900 text-white hover:bg-gray-900 hover:text-white focus:bg-gray-900 focus:text-white',
-                    day_today: 'rounded-md bg-gray-200 text-gray-900',
-                    day_outside: 'day-outside text-gray-500 opacity-50 aria-selected:bg-gray-500 aria-selected:text-gray-900 aria-selected:bg-opacity-10',
-                    day_disabled: 'text-gray-500 opacity-50',
-                    day_hidden: 'invisible',
-                  }}
-                  components={{
-                    IconLeft: ({ ...props }) => (
-                      <ChevronLeftIcon {...props} className="h-4 w-4 stroke-2" />
-                    ),
-                    IconRight: ({ ...props }) => (
-                      <ChevronRightIcon {...props} className="h-4 w-4 stroke-2" />
-                    ),
-                  }}
-                />
-              </PopoverContent>
-            </Popover>
-            <Input
+            {/* <Input
               type="text"
               label="Category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              color="white"
+              color="black"
               size="md"
               className="focus:ring-0"
-            />
+            /> */}
+<Select
+  variant="outlined"
+  label="Select Category"
+  value={category}
+  onChange={(value) => setCategory(value)} // Update the state with the selected value
+  size="md"
+  className="focus:ring-0"
+>
+  {categoryOptions.map((option) => (
+    <Select.Option key={option.value} value={option.value}>
+      {option.label}
+    </Select.Option>
+  ))}
+</Select>
             
             <Input
               type="text"
               label="Venue"
               value={venue}
               onChange={(e) => setVenue(e.target.value)}
-              color="white"
+              color="black"
               size="md"
               className="focus:ring-0"
             />
@@ -183,7 +159,7 @@ console.log("Form submission",eventName,participants,startdate,enddate,timeAllow
               label="Preferred Language"
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              color="white"
+              color="black"
               size="md"
               className="focus:ring-0"
             />
@@ -192,7 +168,7 @@ console.log("Form submission",eventName,participants,startdate,enddate,timeAllow
               label="Prize Amount"
               value={prizeAmount}
               onChange={(e) => setPrizeAmount(e.target.value)}
-              color="white"
+              color="black"
               size="md"
               className="focus:ring-0"
             />
@@ -201,7 +177,7 @@ console.log("Form submission",eventName,participants,startdate,enddate,timeAllow
               label="Level of Participant"
               value={participantLevel}
               onChange={(e) => setParticipantLevel(e.target.value)}
-              color="white"
+              color="black"
               size="md"
               className="focus:ring-0"
             />

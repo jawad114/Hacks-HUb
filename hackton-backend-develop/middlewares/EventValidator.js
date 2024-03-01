@@ -83,13 +83,18 @@ module.exports = class EventValidator {
     const { id } = req.params;
     const {
       event_title,
-      participation_type,
-      event_description,
-      guidelines,
+      // participation_type,
+      numberOfParticipants,
+      // event_description,
+      timeAllowed,
+      // guidelines,
+      preferedLanguage,
       start_date,
       end_date,
       location,
-      category_id
+      category_id,
+      prizeAmount,
+      levelOfParticipant
     } = req.body;
     if (!id) {
       const exists = await eventModel.findByTitle(event_title);
@@ -103,13 +108,18 @@ module.exports = class EventValidator {
     }
     const check = checkItem({
       event_title,
-      participation_type,
-      event_description,
-      guidelines,
+      // participation_type,
+      numberOfParticipants,
+      // event_description,
+      timeAllowed,
+      // guidelines,
+      preferedLanguage,
       start_date,
       end_date,
       location,
-      category_id
+      category_id,
+      prizeAmount,
+      levelOfParticipant            
     });
 
     if (Object.keys(check).length > 0) {

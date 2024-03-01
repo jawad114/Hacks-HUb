@@ -69,7 +69,6 @@
 
 
 import React from 'react';
-import Header from '../Header/Header';
 
 const Hackathons = () => {
   const columns = React.useMemo(
@@ -88,14 +87,21 @@ const Hackathons = () => {
     () => [
       { id: 1, name: 'Hackathon 1', startDate: '2024-03-01', endDate: '2024-03-03', status: 'Active' },
       { id: 2, name: 'Hackathon 2', startDate: '2024-03-05', endDate: '2024-03-07', status: 'Inactive' },
+      { id: 3, name: 'Hackathon 1', startDate: '2024-03-01', endDate: '2024-03-03', status: 'Active' },
+      { id: 4, name: 'Hackathon 2', startDate: '2024-03-05', endDate: '2024-03-07', status: 'Inactive' },
+      { id: 5, name: 'Hackathon 1', startDate: '2024-03-01', endDate: '2024-03-03', status: 'Active' },
+      { id: 6, name: 'Hackathon 2', startDate: '2024-03-05', endDate: '2024-03-07', status: 'Inactive' },
+      { id: 7, name: 'Hackathon 1', startDate: '2024-03-01', endDate: '2024-03-03', status: 'Active' },
+      { id: 8, name: 'Hackathon 2', startDate: '2024-03-05', endDate: '2024-03-07', status: 'Inactive' },
+      { id: 9, name: 'Hackathon 1', startDate: '2024-03-01', endDate: '2024-03-03', status: 'Active' },
+      { id: 10, name: 'Hackathon 2', startDate: '2024-03-05', endDate: '2024-03-07', status: 'Inactive' },
     ],
     []
   );
 
   return (
     <>
-      <Header />
-      <div className="min-h-screen w-screen flex items-start justify-center bg-[#14082c] py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen min-w-screen flex items-start justify-center bg-[#14082c] py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-screen space-y-8 p-8  dark:bg-gray-800">
           <div className="flex items-center justify-center">
             <h1 className="text-2xl font-bold mb-4 text-white dark:text-white">Event Summary</h1>
