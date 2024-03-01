@@ -58,7 +58,7 @@ const UserValidator = require('../middlewares/UserValidator');
 const router = Router();
 
 router.post(
-  '/',
+  '/create-event',
   authenticate,
   EventValidator.eventValidation,
   handleEventsPost

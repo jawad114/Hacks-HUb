@@ -25,13 +25,13 @@ const checkInput = inputValue => {
         }
       }
 
-      if (key === 'participation_type') {
-        if (!['individual', 'team', 'both'].includes(inputValue[key])) {
-          errors[
-            key
-          ] = `please pick between these three options for participation type ['individual','team','both']`;
-        }
-      }
+      // if (key === 'participation_type') {
+      //   if (!['individual', 'team', 'both'].includes(inputValue[key])) {
+      //     errors[
+      //       key
+      //     ] = `please pick between these three options for participation type ['individual','team','both']`;
+      //   }
+      // }
 
       if (key === 'id' || key === 'category_id' || key === 'project_id') {
         if (!validator.isNumeric(String(inputValue[key]))) {
@@ -50,6 +50,13 @@ const checkInput = inputValue => {
       if (key === 'password') {
         if (!validator.isLength(inputValue[key], { min: 8, max: 50 })) {
           errors[key] = `${key} must between 8 and 50 characters`;
+        }
+      }
+      if (key === 'role') {
+        if (!['Organizer', 'Participant'].includes(inputValue[key])) {
+          errors[
+            key
+          ] = `Invalid role, must be one of ['Organizer', 'Participant']`;
         }
       }
     }

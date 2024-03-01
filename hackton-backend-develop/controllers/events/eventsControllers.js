@@ -101,6 +101,7 @@ function handleEventsPost(req, res, next) {
     numberOfParticipants: req.body.numberOfParticipants,
     creator_id: userId,
     start_date: startDate,
+    allowed_time : req.body.allowed_time,
     end_date: endDate,
     location: req.body.location,
     preferedLanguage: req.body.preferedLanguage,

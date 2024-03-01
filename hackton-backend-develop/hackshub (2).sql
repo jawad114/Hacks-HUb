@@ -36,13 +36,13 @@ CREATE TABLE `events` (
   `end_date` datetime NOT NULL,
   `location` text NOT NULL,
   `guidelines` text DEFAULT NULL,
-  `participation_type` enum('individual','team','both') NOT NULL,
+  `participation_type` enum('individual','team','both') DEFAULT NULL,
   `category_id` int(10) UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `numberOfParticipants` int(11) DEFAULT NULL,
-  `preferedLanguage` varchar(255) DEFAULT NULL,
-  `prizeAmount` decimal(10) DEFAULT NULL,
+  `numberOfParticipants` int(11) NOT NULL,
+  `preferedLanguage` varchar(255) NOT NULL,
+  `prizeAmount` decimal(10) NOT NULL,
   `levelOfParticipant` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

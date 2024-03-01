@@ -90,12 +90,46 @@ module.exports = class UserValidator {
     next();
   }
 
+  // static async userLogin(req, res, next) {
+  //   const { password, email } = req.body;
+  //   try {
+  //     const check = checkItem({
+  //       email,
+  //       password
+  //     });
+  //     if (Object.keys(check).length > 0) {
+  //       return res.status(400).json({
+  //         statusCode: 400,
+  //         check
+  //       });
+  //     }
+  //     const returnUser = await userModel.getUserBy({ email });
+
+  //     if (returnUser && returnUser.password) {
+  //       const checkPassword = await bcrypt.compareSync(
+  //         password,
+  //         returnUser.password
+  //       );
+  //       if (returnUser && checkPassword) {
+  //         // eslint-disable-next-line require-atomic-updates
+  //         req.checked = returnUser;
+  //         next();
+  //       }
+  //     }
+
+  //     return requestHandler.error(res, 400, 'wrong credentials');
+  //   } catch (err) {
+  //     return err;
+  //   }
+  // }
   static async userLogin(req, res, next) {
-    const { password, email } = req.body;
+    const { password, email, role } = req.body;
     try {
       const check = checkItem({
         email,
-        password
+        password,
+        role
+
       });
       if (Object.keys(check).length > 0) {
         return res.status(400).json({
@@ -104,22 +138,27 @@ module.exports = class UserValidator {
         });
       }
       const returnUser = await userModel.getUserBy({ email });
-
-      if (returnUser && returnUser.password) {
+  
+      if (returnUser && returnUser.password && returnUser.role === role) {
         const checkPassword = await bcrypt.compareSync(
           password,
           returnUser.password
         );
-        if (returnUser && checkPassword) {
-          // eslint-disable-next-line require-atomic-updates
+        if (checkPassword) {
           req.checked = returnUser;
           next();
         }
       }
-
-      return requestHandler.error(res, 400, 'wrong credentials');
+  
+      return res.status(400).json({
+        statusCode: 400,
+        message: 'Wrong credentials or role'
+      });
     } catch (err) {
-      return err;
+      return res.status(500).json({
+        statusCode: 500,
+        message: 'Internal server error'
+      });
     }
   }
 
