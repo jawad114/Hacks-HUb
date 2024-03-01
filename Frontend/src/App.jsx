@@ -34,7 +34,7 @@ function App() {
                     <Route path='home' element={<Home />} />
                     <Route path='hackathons' element={<Hackathons />} />
                     {/* <Route path='compiler' element={<AffCreate />} />
-                    <Route path='compiler' element={<AffCreate />} /> */}
+                    <Route path='ai-bot' element={<AffCreate />} /> */}
                     <Route path='organize-hackathons' element={<Organize />} />
                   </Routes>
                 </OrganizerLayout>
@@ -44,7 +44,7 @@ function App() {
                   <Route path='home' element={<Home />} />
                     <Route path='hackathons' element={<Hackathons />} />
                     {/* <Route path='compiler' element={<AffCreate />} />
-                    <Route path='compiler' element={<AffCreate />} /> */}
+                    <Route path='ai-bot' element={<AffCreate />} /> */}
                   </Routes>
                 </ParticipantLayout>
               ) : null
